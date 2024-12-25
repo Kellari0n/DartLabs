@@ -1,3 +1,5 @@
+import 'package:dart_labs/lab1.dart';
+
 class LabManager {
   final List<Lab> _labs = [];
 
@@ -93,6 +95,8 @@ class Exercise {
 
 LabManager InitManager() {
   var labManager = LabManager();
-    
+
+  labManager.addLab(InitLab1());
+
   return labManager;
 }
