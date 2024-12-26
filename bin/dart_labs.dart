@@ -1,6 +1,9 @@
-import 'package:args/args.dart';
+import 'dart:io';
 
-const String version = '0.0.1';
+import 'package:args/args.dart';
+import 'package:dart_labs/labs.dart';
+
+const String version = '0.5.0';
 
 ArgParser buildParser() {
   return ArgParser()
@@ -11,20 +14,30 @@ ArgParser buildParser() {
       help: 'Print this usage information.',
     )
     ..addFlag(
-      'verbose',
-      abbr: 'v',
-      negatable: false,
-      help: 'Show additional command output.',
+      'debug',
+      abbr: 'd',
     )
     ..addFlag(
       'version',
       negatable: false,
       help: 'Print the tool version.',
+    )
+    ..addOption(
+      'lab',
+      abbr: 'l',
+    )
+    ..addOption(
+      'part',
+      abbr: 'p'
+    )
+    ..addOption(
+      'exercise',
+      abbr: 'e'
     );
 }
 
 void printUsage(ArgParser argParser) {
-  print('Usage: dart dart_labs.dart <flags> [arguments]');
+  print('Usage: dart_labs <flags> [arguments]');
   print(argParser.usage);
 }
 
@@ -32,7 +45,11 @@ void main(List<String> arguments) {
   final ArgParser argParser = buildParser();
   try {
     final ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
+    final LabManager labManager = initManager();
+
+    int? labNum = int.tryParse(results.option('lab') ?? ''); 
+    int? partNum = int.tryParse(results.option('part') ?? '');
+    int? exNum = int.tryParse(results.option('exercise') ?? '');
 
     // Process the parsed arguments.
     if (results.flag('help')) {
@@ -43,15 +60,66 @@ void main(List<String> arguments) {
       print('dart_labs version: $version');
       return;
     }
-    if (results.flag('verbose')) {
-      verbose = true;
+    if (results.flag('debug')) {
+      print('All arguments: ${results.arguments}');
+      print('All options: ${results.options}');
     }
 
-    // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
-    if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
-    }
+    if (labNum == null) {
+      print("Please select lab.");
+    } else {
+      if (partNum == null) {
+        if (labManager.getLabPartsCount(labNum) > 1) {
+          while (true) {
+            print('This lab have more than one part.');
+            print("Start everything in order? (Y / N): ");
+            var response = stdin.readLineSync()?.toUpperCase();
+            if (response == 'Y') {
+              labManager.start(labNum);
+              return;
+            }
+            else if (response == 'N') {
+              return;
+            }
+          } 
+        } else {
+          if (exNum == null) {
+            while (true) {
+              print("You have not selected exercise.");
+              print("Start everything in order? (Y / N): ");
+              var response = stdin.readLineSync()?.toUpperCase();
+              if (response == 'Y') {
+                labManager.start(labNum, 1);
+                return;
+              }
+              else if (response == 'N') {
+                return;
+              }
+            } 
+          } else {
+            labManager.start(labNum, 1, exNum);
+          }
+        }
+      } else {
+        if (exNum == null) {
+          while (true) {
+            print("You have not selected exercise.");
+            print("Start everything in order? (Y / N): ");
+            var response = stdin.readLineSync()?.toUpperCase();
+            if (response == 'Y') {
+              labManager.start(labNum, partNum);
+              return;
+            }
+            else if (response == 'N') {
+              return;
+            }
+          } 
+        } else {
+          labManager.start(labNum, partNum, exNum);
+        }
+      }
+    } 
+
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);

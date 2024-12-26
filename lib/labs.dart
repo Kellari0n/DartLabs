@@ -7,6 +7,10 @@ class LabManager {
     _labs.add(lab);
   }
 
+  int getLabPartsCount(int labNum) {
+    return _labs.firstWhere((l) => l._number == labNum).getPartsCount();
+  }
+
   void start([int? labNum, int? partNum, int? exNum]) {
     if (labNum == null) {
       for (var lab in _labs) {
@@ -15,14 +19,14 @@ class LabManager {
     }
     else {
       if (partNum == null) {
-        _labs.firstWhere((p) => p._number == partNum).startLab();
+        _labs.firstWhere((p) => p._number == labNum).startLab();
       }
       else {
         if (exNum == null) {
-          _labs.firstWhere((p) => p._number == partNum).startLab(partNum);
+          _labs.firstWhere((p) => p._number == labNum).startLab(partNum);
         }
         else {
-          _labs.firstWhere((p) => p._number == partNum).startLab(partNum, exNum);
+          _labs.firstWhere((p) => p._number == labNum).startLab(partNum, exNum);
         }
       }
     }
@@ -35,6 +39,8 @@ class Lab {
 	final List<LabPart> _parts;
 	
 	Lab(this._number, this._name, this._parts);
+
+  int getPartsCount() { return _parts.length; }
 
   void startLab([int? partNum, int? exNum]) {
     print("Lab $_number. $_name:");
@@ -93,7 +99,7 @@ class Exercise {
   }
 }
 
-LabManager InitManager() {
+LabManager initManager() {
   var labManager = LabManager();
 
   labManager.addLab(InitLab1());
