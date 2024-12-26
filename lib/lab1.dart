@@ -87,7 +87,9 @@ Lab InitLab1() {
 			print("Enter end index: ");
 			int endIdx = int.parse(stdin.readLineSync() ?? "");
 
-			print(list.sublist(startIdx, endIdx));
+      list.removeRange(startIdx, endIdx);
+
+			print(list);
 		}
 	);
 
@@ -130,8 +132,10 @@ Lab InitLab1() {
 Выведите в терминал полученный результат.''', 
 		() {
 			print("Enter list:");
-			List<String> list = stdin.readLineSync()
-									?.split(" ") ?? [];
+			List<int> list = stdin.readLineSync()
+									?.split(" ")
+                  .map((e) => int.parse(e))
+                  .toList() ?? [];
 			
 			print("Enter start index: ");
 			int startIdx = int.parse(stdin.readLineSync() ?? "");
@@ -207,6 +211,7 @@ Lab InitLab1() {
 						.map((e) => int.parse(e))
 						.toSet() ?? {};
 
+      print("Enter set B:");
 			var setB = stdin.readLineSync()
 						?.split(" ")
 						.map((e) => int.parse(e))
@@ -229,6 +234,7 @@ double>  и  число  A.  Удалите  все  элементы  Map,  з�
 						?.split(" ")
 						.map((e) => int.parse(e)) ?? [];
 
+      print("Enter list of values: ");
 			var values = stdin.readLineSync()
 							?.split(" ")
 							.map((e) => double.parse(e)) ?? [];
@@ -256,6 +262,7 @@ String> и строку А. Удалите все элементы значен�
 						?.split(" ")
 						.map((e) => int.parse(e)) ?? [];
 
+      print("Enter list of values: ");
 			var values = stdin.readLineSync()
 							?.split(" ") ?? [];
 
@@ -282,6 +289,7 @@ double>  и число A. Удалите все элементы значени�
 						?.split(" ")
 						.map((e) => int.parse(e)) ?? [];
 
+      print("Enter list of values: ");
 			var values = stdin.readLineSync()
 							?.split(" ")
 							.map((e) => double.parse(e)) ?? [];
@@ -294,6 +302,7 @@ double>  и число A. Удалите все элементы значени�
 			map.removeWhere((key, value) => key <= A);
 
 			print(map);
+      print(map.values.reduce((value, element) => value + element));
 		}
 	);
 
