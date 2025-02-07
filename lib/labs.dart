@@ -102,7 +102,7 @@ class Exercise {
 LabManager initManager() {
   var labManager = LabManager();
 
-  labManager.addLab(InitLab1());
+  labManager.addLab(initLab1());
 
   return labManager;
 }

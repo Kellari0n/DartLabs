@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dart_labs/labs.dart';
 
-Lab InitLab1() {
+Lab initLab1() {
 	var strEx1 = Exercise(
 		1, 
 		'''Напишите приложение, где пользователь вводит строку и букву,
@@ -124,7 +124,7 @@ Lab InitLab1() {
 		}
 	);
 
-	var listEx20 = Exercise(
+  var listEx20 = Exercise(
 		20, 
 		'''Напишите приложение, позволяющее пользователю вводить
 список целочисленных значений и два числа (например a и b). Посчитайте
